@@ -27,11 +27,13 @@ def check_ghost_collision(pacman, ghost):
 def check_pellet_collision(pacman, pellets):
     """Check if Pac-Man collides with the pellets"""
     distance = ((pacman.x - pellets.x) ** 2 + (pacman.y - pellets.y) ** 2) ** 0.5
+    print(pellets.x, pellets.y)
     return distance < 20  # Collision threshold
 
 # Initialize game objects
 pacman = PacMan(300, 300)
 ghost = Ghost(100, 100, RED)
+pellets = Pellet(0,0)
 
 running = True
 while running:
@@ -49,9 +51,10 @@ while running:
 
     # Draw game elements
     draw_maze()
+    draw_pellets()
     pacman.draw()
     ghost.draw()
-    draw_pellets()
+    
 
     # Check for collision
     if check_ghost_collision(pacman, ghost):
@@ -59,9 +62,11 @@ while running:
         running = False
 
         # Check for collision
-    if Pellet.is_colliding(pacman, pellets):
-        print("You got a pellet!")
-        
+    if check_pellet_collision(pacman, pellets):
+        for pellet in pellets:
+            if pacman.x == pellet.x and pacman.y == pellet.y:
+                print("PacMan ate the pellet")
+
 
     pygame.display.flip()
     clock.tick(30) 

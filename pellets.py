@@ -14,6 +14,7 @@ class Pellet:
         self.x = x
         self.y = y
         self.radius = 5 
+        self.color = PELLET_COLOR
 
     def draw(self, surface): # <--- Add 'surface' as an argument
         """
@@ -22,16 +23,8 @@ class Pellet:
             surface (pygame.Surface): The surface to draw the pellet on.
         """
         # Use the passed 'surface' argument instead of the global 'screen'
-        pygame.draw.circle(surface, ORANGE, (self.x, self.y), self.radius) # Use self.radius
-
-    def is_colliding(self, pacman):
-        pacman_x, pacman_y = pacman.get_position()
-        distance = ((self.x - pacman_x) ** 2 + (self.y - pacman_y) ** 2) ** 0.5
-        # Use a defined collision distance, maybe based on radii
-        return distance < 15 # Adjust threshold as needed
-
-
-
+        pygame.draw.circle(surface, self.color, (self.x, self.y), self.radius) # Use self.radius
+    
 
 # Pellet list (you can customize the positions)
 pellets = [
@@ -69,14 +62,3 @@ def draw_pellets():
     """
     for pellet in pellets:
         pellet.draw(screen)
-
-def check_pellet_collection(pacman):
-    """
-    Check if Pac-Man collects any pellets. 
-    If Pac-Man collides with a pellet, remove it from the list.
-    Parameters:
-        pacman (PacMan): The PacMan object to check for collisions with pellets.
-    """
-    global pellets  # Modify the global pellets list
-    # Create a new list excluding the pellets that Pac-Man ate
-    pellets = [pellet for pellet in pellets if not pellet.is_colliding(pacman)]

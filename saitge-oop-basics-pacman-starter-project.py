@@ -7,7 +7,7 @@ pygame.init()
 # Screen settings
 WIDTH, HEIGHT = 600, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Pac-Man Python Game")
+pygame.display.set_caption("Pac-Man Interactive")
 
 clock = pygame.time.Clock()
 
@@ -16,9 +16,6 @@ YELLOW = (255, 255, 0)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-ORANGE = (255, 165, 0)
-BLUE = (0, 0, 255)
-GRAY = (128, 128, 128,)
 
 # Maze List with gaps
 # pygame.Rect(x, y, width, height): This function creates a rectangle with the specified position (x, y) and dimensions (width, height).
@@ -45,7 +42,7 @@ class PacMan:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.speed = 8
+        self.speed = 5
         self.history = []  # Store movement history
 
     def move(self, direction):
@@ -110,8 +107,7 @@ class Ghost:
                 if distance < min_distance:
                     min_distance = distance
                     best_direction = direction
-# Move the ghost in the best direction so they get closer to Pac-Man
-# If the best direction is found, update the ghost's position based on that direction
+
         if best_direction:
             if best_direction == "UP":
                 self.y -= self.speed
@@ -122,7 +118,7 @@ class Ghost:
             elif best_direction == "RIGHT":
                 self.x += self.speed
         else:
-            # If no direction is found, follow the wall
+            # If no best direction found, follow the wall
             self.follow_wall()
 
     def follow_wall(self):
@@ -192,72 +188,6 @@ while running:
         running = False
 
     pygame.display.flip()
-    clock.tick(30) 
-
-
-
-class Pellet:
-    def __init__(self, x, y):
-        """
-        Initialize a new Pellet at the given (x, y) position.
-        Parameters:
-            x (int): X-coordinate of the pellet.
-            y (int): Y-coordinate of the pellet.
-        """
-        self.x = x
-        self.y = y
-
-    def draw(self):
-        """
-        Draw the pellet on the screen as a yellow circle.
-        """
-        pygame.draw.circle(screen, ORANGE, (self.x, self.y), 10)
-
-    def is_colliding(self, pacman):
-        """
-        Check if Pac-Man has collided with this pellet.
-        Parameters:
-            pacman (PacMan): The PacMan object to check for collision.
-        Returns:
-            bool: True if Pac-Man's position is close enough to the pellet, else False.
-        """
-        pacman_x, pacman_y = pacman.get_position()
-        distance = ((self.x - pacman_x) ** 2 + (self.y - pacman_y) ** 2) ** 0.5
-        return distance < 15  # Collision threshold (distance between Pac-Man and pellet)
-
-
-
-
-
-# Pellet list (you can customize the positions)
-pellets = [
-    Pellet(100, 100), Pellet(200, 100), Pellet(300, 100), Pellet(400, 100), Pellet(500, 100),
-    Pellet(100, 200), Pellet(500, 200),
-    Pellet(100, 300), Pellet(500, 300),
-    Pellet(100, 400), Pellet(500, 400),
-    Pellet(100, 500), Pellet(500, 500),
-    Pellet(200, 400), Pellet(300, 400), Pellet(400, 400)
-]
-
-def draw_pellets():
-    """
-    Draw all pellets on the screen.
-    Loops through the list of pellet objects and calls their draw method.
-    """
-    for pellet in pellets:
-        pellet.draw(screen)
-
-def check_pellet_collection(pacman):
-    """
-    Check if Pac-Man collects any pellets. 
-    If Pac-Man collides with a pellet, remove it from the list.
-    Parameters:
-        pacman (PacMan): The PacMan object to check for collisions with pellets.
-    """
-    global pellets  # Modify the global pellets list
-    # Create a new list excluding the pellets that Pac-Man ate
-    pellets = [pellet for pellet in pellets if not pellet.is_colliding(pacman)]
-
-
+    clock.tick(30)
 
 pygame.quit()
